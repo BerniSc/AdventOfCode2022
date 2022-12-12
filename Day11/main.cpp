@@ -11,6 +11,7 @@ Write your code in this editor and press "Run" button to compile and execute it.
 #include <cstring>
 #include <numeric>
 
+//vlt etwas unelegant, aber genervt -> long long nötig weil schlimmstenfalls (kgV-1)^2 für teil 2 -> int raus 
 #define int long long
 
 using namespace std;
@@ -142,7 +143,7 @@ vector<string>& seperateString(string toSeperate, const char *seperator) {
 
 void processDataPart2(const vector<vector<string>> &vec, unsigned int &saveVar) {
     vector<Monkey*> monkeys;
-
+    //VERARBEITEN UND SPEICHERN IN MONKEY
     for(int i = 0; i < vec.size(); i++) {
         vector<string> data = seperateString(vec[i][3], "Test: divbly");
         int test = stoi(data[0]);
@@ -158,6 +159,7 @@ void processDataPart2(const vector<vector<string>> &vec, unsigned int &saveVar) 
         }
     }
     
+    //AN MONKEY OPERATION DURCHFÜHREN
     for(int i = 0; i < 10000; i++) {
         for(auto m : monkeys) {
             m->operate2();
@@ -171,7 +173,7 @@ void processDataPart2(const vector<vector<string>> &vec, unsigned int &saveVar) 
             m->clearItems();
         }
     }
-
+    //BEIDEN MAXIMALWERTE SUCHEN
     int max1 = 0, max2 = 0, temp;
     for(auto m : monkeys) {
         cout << "Monkey" << m->monkeyNumber << " " << m->inspectionCounter << endl;
@@ -186,11 +188,13 @@ void processDataPart2(const vector<vector<string>> &vec, unsigned int &saveVar) 
         delete m;
     }
     cout << max1 << "    " << max2 << endl;
+    //ERGBENIS SETZEN
     saveVar = max1 * max2;
 }
 
 void processData(const vector<vector<string>> &vec, int &saveVar) {
     vector<Monkey*> monkeys;
+    //VERARBEITEN UND SPEICHERN IN MONKEY
     for(int i = 0; i < vec.size(); i++) {
         vector<string> data = seperateString(vec[i][3], "Test: divbly");
         int test = stoi(data[0]);
@@ -205,6 +209,7 @@ void processData(const vector<vector<string>> &vec, int &saveVar) {
         }
     }
 
+    //AN MONKEY OPERATION DURCHFÜHREN
     for(int i = 0; i < 20; i++) {
         for(auto m : monkeys) {
             m->operate();
@@ -218,6 +223,8 @@ void processData(const vector<vector<string>> &vec, int &saveVar) {
             m->clearItems();
         }
     }
+  
+    //BEIDEN MAXIMALWERTE SUCHEN
     int max1 = 0, max2 = 0, temp;
     for(auto m : monkeys) {
         if(m->inspectionCounter > max1) {
@@ -230,6 +237,7 @@ void processData(const vector<vector<string>> &vec, int &saveVar) {
         }
         delete m;
     }
+    //ERGBENIS SETZEN
     saveVar = max1 * max2;
 }
 
