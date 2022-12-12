@@ -103,6 +103,8 @@ void processData(vector<string> vecSingle, int &saveVar) {
                 f.oben = -1;
             }
 
+            if()
+
             //Oben
             for(int x = i-1; x >= 0; x--) {
                 //Reihe durchgehen bis nicht mehr sichtbar
