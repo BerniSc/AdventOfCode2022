@@ -247,8 +247,8 @@ signed main() {
 
     readInData("jasmina.txt", linesJasmina);
     //printLines(linesJasmina);
-    //processData(linesJasmina, sumJasmina);
-    //processDataPart2(linesJasmina, sumJasminaPart2);
+    processData(linesJasmina, sumJasmina);
+    processDataPart2(linesJasmina, sumJasminaPart2);
     
     
     cout << endl << "Bernhard: " << sumBernhard <<  "   " << sumBernhardPart2 << endl;

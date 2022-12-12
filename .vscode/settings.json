@@ -9,6 +9,12 @@
         "utility": "cpp",
         "iosfwd": "cpp",
         "string": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "*.tcc": "cpp",
+        "vector": "cpp",
+        "istream": "cpp",
+        "limits": "cpp",
+        "sstream": "cpp",
+        "streambuf": "cpp"
     }
 }

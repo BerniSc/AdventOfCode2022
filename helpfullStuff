@@ -12,7 +12,7 @@ Write your code in this editor and press "Run" button to compile and execute it.
 
 using namespace std;
 
-static string data;
+static string inputData;
 
 static vector<vector<string>> linesBernhard;
 static vector<vector<string>> linesJasmina;
@@ -39,10 +39,10 @@ void readInData(const string& fileName, vector<vector<string>> &dataDestination)
     vector<string> paragraph;
     if(myFile.is_open()) {
         while(myFile) {
-            if(myFile.eof()) data = "";
-            getline(myFile, data);
-            if(data != "") {
-                paragraph.push_back(data);
+            if(myFile.eof()) inputData = "";
+            getline(myFile, inputData);
+            if(inputData != "") {
+                paragraph.push_back(inputData);
             } else {
                 dataDestination.push_back(paragraph);
                 paragraph.clear();
