@@ -78,7 +78,7 @@ vector<string>& seperateString(string toSeperate, const char *seperator) {
 
 void processData(const vector<string> &vecSingle, int &saveVar) {
     int width = 16;
-    int height = 12;
+    int height = 16;
 
     vector<vector<char>> cave;
     for(int y = 0; y < height; y++) {
@@ -124,21 +124,43 @@ void processData(const vector<string> &vecSingle, int &saveVar) {
         }
     }
 
+    int fallenSandCounter = 0;
     
-    for(int i = 0; i < 24; i++) {
+    int minJ = 9;
+
+    for(int i = 0; i < 100; i++) {
         int xSand = width/2;
         int ySand = 1;
+        bool kill = false;
         for(int j = 0; j < height-1; j++) {
             //Wenn Feld darunter frei
             if(cave[ySand+1][xSand] == '.') {
                 ySand = j;
+                if(j > minJ) kill = true;
+            } else if(cave[ySand+1][xSand-1] == '.' && xSand-1 >= 0) {
+                ySand = j;
+                xSand -= 1;
+                if(j > minJ) kill = true;
+            } else if(cave[ySand+1][xSand+1] == '.' && xSand+1 < width) {
+                ySand = j;
+                xSand += 1;
+                if(j > minJ) kill = true;
             } else {
+                if(j == 0) {
+                    cout << "EEEEEnde " << fallenSandCounter << endl;
+                    kill = true;
+                }
                 break;
             }
             //cout << ySand << "  " << xSand << endl;
         }
-        cave[ySand][xSand] = 'o';
+        if(!kill) {
+            fallenSandCounter++;
+            cave[ySand][xSand] = 'o';
+        }
     }
+
+    cout << fallenSandCounter << endl;
 
     
     for(auto c : cave) {
