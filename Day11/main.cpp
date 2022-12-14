@@ -147,7 +147,7 @@ void processDataPart2(const vector<vector<string>> &vec, unsigned int &saveVar) 
     for(int i = 0; i < vec.size(); i++) {
         vector<string> data = seperateString(vec[i][3], "Test: divbly");
         int test = stoi(data[0]);
-        Monkey::kgV = lcm(Monkey::kgV, test);
+        Monkey::kgV *= test;
         data = seperateString(vec[i][4], "If true: throw to monkey");
         int nextMonkeyTrue = stoi(data[0]);
         data = seperateString(vec[i][5], "If false: throw to monkey");
