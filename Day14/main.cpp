@@ -171,10 +171,10 @@ void processDataPartTwo(const vector<string> &vecSingle, int &saveVar) {
             } else {
                 if(xSand-1 < 0 || xSand+1 > width) {
                     kill = true;
-                    cout << "TERMINATED" << endl;
+                    //cout << "TERMINATED" << endl;
                 }
                 if(j == 0) {
-                    cout << "EEEEEnde " << fallenSandCounter << endl;
+                    //cout << "EEEEEnde " << fallenSandCounter << endl;
                     kill = true;
                 }
                 break;

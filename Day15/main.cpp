@@ -30,6 +30,10 @@ struct Sensor {
     Sensor(int x, int y, int bX, int bY) : ownX(x), ownY(y), beaconX(bX), beaconY(bY) {
 
     }
+
+    int getDistance() {
+        return (abs(ownX - beaconX) + abs(ownY - beaconY));
+    }
 };
 
 void printLines(const vector<vector<string>> &vec) {
@@ -89,6 +93,9 @@ void processData(const vector<string> &vecSingle, int &saveVar) {
     int minX = 100000, maxX = 0;
     int minY = 100000, maxY = 0;
 
+    //int desiredRow = 2000000;
+    int desiredRowInt = 10;
+
     vector<Sensor*> sensors;
 
     for(int i = 0; i < vecSingle.size(); i++) {
@@ -106,52 +113,57 @@ void processData(const vector<string> &vecSingle, int &saveVar) {
         sensors.push_back(new Sensor(stoi(data[0]), stoi(data[1]), stoi(data[2]), stoi(data[3])));
     }
 
+    char desiredRowRow[maxX-minX];
+    for(int i = 0; i < (maxX-minX); i++) {
+        desiredRowRow[i] = '.';
+    }
+
+    for(auto s : sensors) {
+        if(s->ownY > desiredRowInt) {
+            //Hoch
+            if((s->ownY - s->getDistance()) <= desiredRowInt) {
+                int dif = abs((s->ownY - s->getDistance()) - desiredRowInt);
+                for(int i = 0; i <= 2 * dif; i++) {
+                    desiredRowRow[(s->ownX-dif)+i-minX-1] = 'X';
+                    //cout << s->ownX << " | " << s->ownY << " -> " << s->getDistance() << endl;
+                }
+                //cout << "Sensor" << endl;
+            } 
+        } else {
+            //Runter
+            if((s->ownY + s->getDistance()) >= desiredRowInt) {
+                int dif = (s->ownY + s->getDistance()) - desiredRowInt;
+                for(int i = 0; i <= 2 * dif; i++) {
+                    if(s->ownY==7 && s->ownX==8);
+                    desiredRowRow[(s->ownX-dif)+i-minX-1] = 'X';
+                }
+                //cout << "Sensor" << endl;
+            }
+        }
+    }
+
+    
+    for(int i = 0; i < (maxX-minX); i++) {
+        if(!(i%5)) cout << "    ";
+        //cout << desiredRowRow[i];
+        if(desiredRowRow[i] == 'X') saveVar++;
+    }
+    //cout << endl;
+
     cout << maxX << "," << maxY << "    " << minX << "," << minY << endl;
-
-    vector<vector<char>> sensorMap;
-    for(int y = 0; y <= (maxY - minY); y++) {
-        vector<char> row;
-        sensorMap.push_back(row);
-        for(int x = 0; x <= (maxX - minX); x++) {
-            sensorMap[y].push_back('.');
-        }
-    }
-
-    for(int i = 0; i < vecSingle.size(); i++) {
-        vector<string> data = seperateString(vecSingle[i], "Sensor at closest beacon is x= y= : ,");
-        int x1 = stoi(data[0]);
-        int y1 = stoi(data[1]);
-        int x2 = stoi(data[2]);
-        int y2 = stoi(data[3]);
-
-        sensorMap[y1-minY][x1-minX] = 'S';
-        cout << y2-minY << "            " << x2-minX << endl;
-        sensorMap[y2-minY][x2-minX] = 'B';
-    }
-
-    //for(int i = 0; i < sensors.size(); i++) {
-    //    if()
-    //}
-
-    for(auto s : sensorMap) {
-        for(auto v : s) {
-            cout << v;
-        }
-        cout << endl;
-    }
 
 }
 
 int main() {
     readInData("bernhard.txt", linesBernhard);
 
-    printLines(linesBernhard);
-    split2DimVec(linesBernhard);
+    //printLines(linesBernhard);
+    //split2DimVec(linesBernhard);
     processData(split2DimVec(linesBernhard), sumBernhard);
 
-    //readInData("jasmina.txt", linesJasmina);
+    readInData("jasmina.txt", linesJasmina);
     //printLines(linesJasmina);
-    //processData(split2DimVec(linesJasmina), sumJasmina);
+    processData(split2DimVec(linesJasmina), sumJasmina);
     
     cout << endl << "Bernhard: " << sumBernhard <<  "   " << sumBernhardPart2 << endl;
     cout << "Jasmina: " << sumJasmina << "  " << sumJasminaPart2 << endl;
