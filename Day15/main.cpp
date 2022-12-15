@@ -23,6 +23,15 @@ static int sumJasmina = 0;
 static int sumBernhardPart2 = 0;
 static int sumJasminaPart2 = 0;
 
+struct Sensor {
+    int ownX, ownY;
+    int beaconX, beaconY;
+
+    Sensor(int x, int y, int bX, int bY) : ownX(x), ownY(y), beaconX(bX), beaconY(bY) {
+
+    }
+};
+
 void printLines(const vector<vector<string>> &vec) {
     for(int i = 0; i < vec.size(); i++) {
         for(int j = 0; j < vec[i].size(); j++) {
@@ -80,6 +89,8 @@ void processData(const vector<string> &vecSingle, int &saveVar) {
     int minX = 100000, maxX = 0;
     int minY = 100000, maxY = 0;
 
+    vector<Sensor*> sensors;
+
     for(int i = 0; i < vecSingle.size(); i++) {
         vector<string> data = seperateString(vecSingle[i], "Sensor at closest beacon is x= y= : ,");
         minX = min(minX, stoi(data[0]));
@@ -91,15 +102,17 @@ void processData(const vector<string> &vecSingle, int &saveVar) {
         minY = min(minY, stoi(data[3]));
         maxY = max(maxY, stoi(data[1]));
         maxY = max(maxY, stoi(data[3]));
+
+        sensors.push_back(new Sensor(stoi(data[0]), stoi(data[1]), stoi(data[2]), stoi(data[3])));
     }
 
     cout << maxX << "," << maxY << "    " << minX << "," << minY << endl;
 
     vector<vector<char>> sensorMap;
-    for(int y = 0; y < (maxY - minY); y++) {
+    for(int y = 0; y <= (maxY - minY); y++) {
         vector<char> row;
         sensorMap.push_back(row);
-        for(int x = 0; x < (maxX - minX); x++) {
+        for(int x = 0; x <= (maxX - minX); x++) {
             sensorMap[y].push_back('.');
         }
     }
@@ -115,6 +128,10 @@ void processData(const vector<string> &vecSingle, int &saveVar) {
         cout << y2-minY << "            " << x2-minX << endl;
         sensorMap[y2-minY][x2-minX] = 'B';
     }
+
+    //for(int i = 0; i < sensors.size(); i++) {
+    //    if()
+    //}
 
     for(auto s : sensorMap) {
         for(auto v : s) {
