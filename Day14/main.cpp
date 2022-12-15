@@ -77,8 +77,23 @@ vector<string>& seperateString(string toSeperate, const char *seperator) {
 }
 
 void processData(const vector<string> &vecSingle, int &saveVar) {
-    int width = 16;
-    int height = 16;
+    int xMin = 1000, xMax = 0;
+    int yMin = 1000, yMax = 0;
+    for(int i = 0; i < vecSingle.size(); i++) {
+        vector<string> seperatedData = seperateString(vecSingle[i], "->");
+        for(int j = 0; j < seperatedData.size() - 1; j++) {
+            vector<string> seperatedSecond = seperateString(seperatedData[j], ",");
+            xMax = max(xMax, stoi(seperatedSecond[0]));
+            yMax = max(yMax, stoi(seperatedSecond[1]));
+            xMin = min(xMin, stoi(seperatedSecond[0]));
+            yMin = min(yMin, stoi(seperatedSecond[1]));
+        }
+    }
+
+    //int width = 16;
+    int width = xMax - xMin + 42;
+    //int height = 16;
+    int height = yMax + 2;
 
     vector<vector<char>> cave;
     for(int y = 0; y < height; y++) {
@@ -113,12 +128,21 @@ void processData(const vector<string> &vecSingle, int &saveVar) {
                     xTwo++;
                     cave[yTwo][xTwo] = '#';
                 }
+
+                while(xTwo > xOne) {
+                    xOne++;
+                    cave[yOne][xOne] = '#';
+                }
             }
             //If Same Collumn
             if(xOne == xTwo) {
                 while(yOne < yTwo) {
                     yOne++;
                     cave[yOne][xOne] = '#';
+                }
+                while(yOne > yTwo) {
+                    yTwo++;
+                    cave[yTwo][xTwo] = '#';
                 }
             }
         }
@@ -128,7 +152,7 @@ void processData(const vector<string> &vecSingle, int &saveVar) {
     
     int minJ = 9;
 
-    for(int i = 0; i < 100; i++) {
+    for(int i = 0; i < 1000; i++) {
         int xSand = width/2;
         int ySand = 1;
         bool kill = false;
@@ -136,16 +160,20 @@ void processData(const vector<string> &vecSingle, int &saveVar) {
             //Wenn Feld darunter frei
             if(cave[ySand+1][xSand] == '.') {
                 ySand = j;
-                if(j > minJ) kill = true;
-            } else if(cave[ySand+1][xSand-1] == '.' && xSand-1 >= 0) {
+                if(j >= minJ) kill = true;
+            } else if(cave[ySand+1][xSand-1] == '.' && xSand-1 > 0) {
                 ySand = j;
                 xSand -= 1;
-                if(j > minJ) kill = true;
+                if(j >= minJ) kill = true;
             } else if(cave[ySand+1][xSand+1] == '.' && xSand+1 < width) {
                 ySand = j;
                 xSand += 1;
-                if(j > minJ) kill = true;
+                if(j >= minJ) kill = true;
             } else {
+                if(xSand-1 < 0 || xSand+1 > width) {
+                    kill = true;
+                    cout << "TERMINATED" << endl;
+                }
                 if(j == 0) {
                     cout << "EEEEEnde " << fallenSandCounter << endl;
                     kill = true;

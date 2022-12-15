@@ -77,9 +77,52 @@ vector<string>& seperateString(string toSeperate, const char *seperator) {
 }
 
 void processData(const vector<string> &vecSingle, int &saveVar) {
-    int minX = 100000, minY = 100000;
-    int maxX = 0, maxY = 0;
-    
+    int minX = 100000, maxX = 0;
+    int minY = 100000, maxY = 0;
+
+    for(int i = 0; i < vecSingle.size(); i++) {
+        vector<string> data = seperateString(vecSingle[i], "Sensor at closest beacon is x= y= : ,");
+        minX = min(minX, stoi(data[0]));
+        minX = min(minX, stoi(data[2]));
+        maxX = max(maxX, stoi(data[0]));
+        maxX = max(maxX, stoi(data[2]));
+        
+        minY = min(minY, stoi(data[1]));
+        minY = min(minY, stoi(data[3]));
+        maxY = max(maxY, stoi(data[1]));
+        maxY = max(maxY, stoi(data[3]));
+    }
+
+    cout << maxX << "," << maxY << "    " << minX << "," << minY << endl;
+
+    vector<vector<char>> sensorMap;
+    for(int y = 0; y < (maxY - minY); y++) {
+        vector<char> row;
+        sensorMap.push_back(row);
+        for(int x = 0; x < (maxX - minX); x++) {
+            sensorMap[y].push_back('.');
+        }
+    }
+
+    for(int i = 0; i < vecSingle.size(); i++) {
+        vector<string> data = seperateString(vecSingle[i], "Sensor at closest beacon is x= y= : ,");
+        int x1 = stoi(data[0]);
+        int y1 = stoi(data[1]);
+        int x2 = stoi(data[2]);
+        int y2 = stoi(data[3]);
+
+        sensorMap[y1-minY][x1-minX] = 'S';
+        cout << y2-minY << "            " << x2-minX << endl;
+        sensorMap[y2-minY][x2-minX] = 'B';
+    }
+
+    for(auto s : sensorMap) {
+        for(auto v : s) {
+            cout << v;
+        }
+        cout << endl;
+    }
+
 }
 
 int main() {
@@ -89,9 +132,9 @@ int main() {
     split2DimVec(linesBernhard);
     processData(split2DimVec(linesBernhard), sumBernhard);
 
-    readInData("jasmina.txt", linesJasmina);
-    printLines(linesJasmina);
-    processData(split2DimVec(linesJasmina), sumJasmina);
+    //readInData("jasmina.txt", linesJasmina);
+    //printLines(linesJasmina);
+    //processData(split2DimVec(linesJasmina), sumJasmina);
     
     cout << endl << "Bernhard: " << sumBernhard <<  "   " << sumBernhardPart2 << endl;
     cout << "Jasmina: " << sumJasmina << "  " << sumJasminaPart2 << endl;
