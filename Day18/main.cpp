@@ -76,6 +76,8 @@ vector<string>& seperateString(string toSeperate, const char *seperator) {
     return result;
 }
 
+
+//Statt wie bei Teil ein von Würfeln und Wänden aus zu gehen, jetzt von "Freiem" PLatz ausgehend durchgehen und in zweitem array alle Sichtbaren kanten nochmal auf 1 setzen -> Kanten Zählen -> Rekursiv mit Dijkstra o.ä. Alle verfügbaren Wege bis Sackgasse durchgehen
 void processDataPartTwo(const vector<string> &vecSingle, int &saveVar, int size) {
     bool grid[size][size][size];
 
@@ -230,6 +232,7 @@ int main() {
     readInData("bernhard.txt", linesBernhard);
 
     printLines(linesBernhard);
+    //21 Max Value bei Bernhard und Jasmina
     processData(split2DimVec(linesBernhard), sumBernhard, 22);
     processDataPartTwo(split2DimVec(linesBernhard), sumBernhardPart2, 22);
 
