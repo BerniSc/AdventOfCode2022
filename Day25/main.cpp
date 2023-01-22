@@ -97,7 +97,7 @@ int SNAFU_to_dec(string snafu) {
     return result;
 }
 
-string dec_to_snafu_helper_positive(int &length, int &dec, int &dummy) {
+/*string dec_to_snafu_helper_positive(int &length, int &dec, int &dummy) {
     if(dummy < dec) {
         dec -= 2*pow(5, length);
         cout << dec << endl;
@@ -114,9 +114,9 @@ string dec_to_snafu_helper_positive(int &length, int &dec, int &dummy) {
         }
         return "1";
     }
-}
+}*/
 
-string dec_to_snafu_helper_negative(int &length, int &dec, int &dummy) {
+/*string dec_to_snafu_helper_negative(int &length, int &dec, int &dummy) {
     if(dummy < dec) {
         dec -= 2*pow(5, length);
         cout << dec << endl;
@@ -132,18 +132,18 @@ string dec_to_snafu_helper_negative(int &length, int &dec, int &dummy) {
         }
         return "-";
     }
-}
+}*/
 
-int dec_to_snafu_helper_1_2(int &length, int &dec) {
+/*int dec_to_snafu_helper_1_2(int &length, int &dec) {
     int dummy = pow(5, length-1);
     for(int i = (length - 2); i >= 0; i--) {
         dummy += 2 * pow(5, i);
     }  
     length--;
     return dummy;
-}
+}*/
 
-string dec_to_SNAFU(int dec) {
+/*string dec_to_SNAFU(int dec) {
     //Höchste 5er Potenz suchen die noch geht -> Länge
     int length = 0;
     int actualSum = 0;
@@ -176,13 +176,14 @@ string dec_to_SNAFU(int dec) {
     }
 
     cout << s << endl;
-}
+}*/
 
 string dec_to_SNAFU_idea_2(int dec) {
     //Determine length
     int length = 0;
     int actualSum = 0;
     
+    //While actual dec larger than maximum of current length Snafu->Dec increment length
     while(dec >= actualSum) {
         actualSum += 2 * pow(5, length);
         length++;
@@ -191,16 +192,26 @@ string dec_to_SNAFU_idea_2(int dec) {
     //convert number to char
     static const char snafu[] = {'=', '-', '0', '1', '2'}; 
 
+    //generate string with length + 1, initialize ever element with 0 and add C String terminator
     char stringSnafu[length + 1] = {0};
     stringSnafu[length] = '\0';
 
+    //Set position "POINTER" on last element (- terminator)
     int position = (length - 1);
 
+    //i.E. 3 is converted -> string is length 2 -> 00\0 
+    //  value = -2 -> string is now 0=\0
+    //  dec is now 5/5 -> 1
+    //  --> string is now 1=\0 and finished
     while(dec > 0) {
         int value = dec % 5;
+        //Since 3 & 4 are not allowed as values they are normalized by subtracting 5 (i.E. "borrowing" from the next digit)
         if(value >= 3) value -= 5;
+        // + 2 to prevent out of bounds in Lookup Table
         stringSnafu[position--] = snafu[value+2];
+        // reducing by either normalized + borrowed or by normal value 
         dec -= value;
+        //going one digit further
         dec /= 5;
     }
 
@@ -221,6 +232,7 @@ void processData(const vector<string> &vecSingle, int &saveVar) {
 }
 
 signed main() {
+    //ONLY dec_to_SNAFU_idea_2 fully functioning, dec_to_SNAFU abanoned after too many problems
     cout << dec_to_SNAFU_idea_2(7475) << endl;
     cout << SNAFU_to_dec("11-00") << endl;
 
